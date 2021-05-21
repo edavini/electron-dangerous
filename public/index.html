@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Electron Dangerous!</title>
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+</head>
+<body style="background: white;">
+    Date: <pre id="timestamp"></pre>
+    <pre id="flags"></pre>
+    <pre id="pips"></pre>
+    <pre id="fuel"></pre>
+    <pre id="cargo"></pre>
+    <pre id="flags-binary"></pre>
+    <pre id="counter"></pre>
+    <script>
+        function ge(id) {
+            return document.getElementById(id);
+        }
+        function sc(id, text) {
+            ge(id).textContent = text;
+        }
+        require('electron').ipcRenderer.on('ping', (event, message) => {
+            console.log(new Date() + ' - ' + 'Data Received')
+
+            const data = JSON.parse(message)
+            const filteredFlags = data.flags.filter(x => x.value == 1).map(x => x.name);
+
+            sc('flags-binary', Number(data.Flags).toString(2));
+            sc('timestamp', data.timestamp);
+            sc('flags', JSON.stringify(filteredFlags, null, 2));
+            sc('pips', data.Pips);
+            sc('fuel', JSON.stringify(data.Fuel));
+            sc('cargo', JSON.stringify(data.Cargo));
+            sc('counter', Number(document.getElementById('counter').textContent) +1);
+        })
+    </script>
+    
+</body>
+</html>
