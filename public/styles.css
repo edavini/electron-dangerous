@@ -1,0 +1,49 @@
+body {
+    margin: 0 auto;
+    padding: 15px;
+    background-color: #111111;
+    font-size: 18pt;
+    color: #FAFAFA;
+    font-family: 'Orbitron', sans-serif;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+.date {
+    color: darkgreen;
+}
+
+.on {
+    opacity: 1;
+}
+.off {
+    opacity: 0.1;
+}
+
+.column-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.column {
+    width: 350px;
+    text-align: center;
+    padding: 2rem;
+}
+.column div {
+    padding: 0.3rem;
+}
+
+
+.blink {
+    animation: blinker 0.3s linear infinite;
+  }
+  
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }

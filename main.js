@@ -4,14 +4,15 @@ const fs = require('fs')
 
 const STATUS_PATH = path.join('C:', 'Users', 'edoar', 'Saved Games', 'Frontier Developments', 'Elite Dangerous', 'Status.json')
 
-const FLAG_MAP = require('app/config/flags.json');
+const FLAG_MAP = JSON.parse(fs.readFileSync(path.join('app', 'config', 'flag.json')));
+const WINDOW_CONFIG = fs.readFileSync(path.join('app', 'config', 'window.json'));
 
 let static_json = {};
 
 function createWindow () {
   const win = new BrowserWindow({
-    width: 400,
-    height: 800,
+    width: WINDOW_CONFIG.width,
+    height: WINDOW_CONFIG.height,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
@@ -20,7 +21,7 @@ function createWindow () {
     }
   })
 
-  win.loadFile('public/index.html')
+  win.loadFile('public/index.html');
   return win
 }
 
@@ -72,7 +73,7 @@ function readAndParseStatus(filePath) {
   } catch (err) {
     console.error(err);
   }
-  const flagsArray = Number(json.Flags >>> 0).toString(2).split('').reverse();
+  const flagsArray = Number(json.Flags).toString(2).padStart(32, '0').split('').reverse();
   const flagsJson = extractFlagsData(flagsArray);
   json.flags = flagsJson;
   return json;
@@ -95,7 +96,6 @@ app.whenReady().then(() => {
     watchStatus(json => {
       sendStatusData(win, json);
     });
-    console.log('ready to roll 1');
 
     win.on('activate', () => {
       getStatus(win);

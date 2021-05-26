@@ -4,37 +4,75 @@
     <meta charset="UTF-8">
     <title>Electron Dangerous!</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">   
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body style="background: white;">
-    Date: <pre id="timestamp"></pre>
+<body>
+
+    <h1>Electron Dangerous</h1>
+    <blockquote>Last Update: <span class="date" id="timestamp"></blockquote>
+    <blockquote>Status: <span class="date" id="status"></span></blockquote>
+    
+    <h2>Ship status</h2>
+
+    <div class="column-container">
+        <div class="location column">
+            <div class="flag" id="flag-0"><span class="flag-name">Docked, (on a landing pad)</span><span class="flag-status" id="flag-status-0"></span></div>
+            <div class="flag" id="flag-1"><span class="flag-name">Landed, (on planet surface)</span><span class="flag-status" id="flag-status-1"></span></div>
+            <div class="flag" id="flag-2"><span class="flag-name">Landing Gear Down</span><span class="flag-status" id="flag-status-2"></span></div>    
+            <br />
+            <div class="flag" id="flag-24"><span class="flag-name">In MainShip</span><span class="flag-status" id="flag-status-24"></span></div>
+            <div class="flag" id="flag-25"><span class="flag-name">In Fighter</span><span class="flag-status" id="flag-status-25"></span></div>
+            <div class="flag" id="flag-26"><span class="flag-name">In SRV</span><span class="flag-status" id="flag-status-26"></span></div>    
+            <div class="flag" id="flag-7"><span class="flag-name">In Wing</span><span class="flag-status" id="flag-status-7"></span></div>
+        </div>
+        <div class="engine column">
+            <div class="flag" id="flag-4"><span class="flag-name">Supercruise</span><span class="flag-status" id="flag-status-4"></span></div>
+            <div class="flag" id="flag-16"><span class="flag-name">Fsd MassLocked</span><span class="flag-status" id="flag-status-16"></span></div>
+            <div class="flag" id="flag-17"><span class="flag-name">Fsd Charging</span><span class="flag-status" id="flag-status-17"></span></div>
+            <div class="flag" id="flag-18"><span class="flag-name">Fsd Cooldown</span><span class="flag-status" id="flag-status-18"></span></div>
+            <div class="flag" id="flag-30"><span class="flag-name">fsdJump</span><span class="flag-status" id="flag-status-30"></span></div>
+            <br />
+            <div class="flag" id="flag-11"><span class="flag-name">Scooping Fuel</span><span class="flag-status" id="flag-status-11"></span></div>    
+            <div class="flag" id="flag-19"><span class="flag-name">Low Fuel ( &lt; 25% )</span><span class="flag-status" id="flag-status-19"></span></div>
+            <div class="flag" id="flag-5"><span class="flag-name">FlightAssist Off</span><span class="flag-status" id="flag-status-5"></span></div>
+        </div>
+        <div class="ship-status column">
+            <div class="flag" id="flag-3"><span class="flag-name">Shields Up</span><span class="flag-status" id="flag-status-3"></span></div>
+            <div class="flag" id="flag-6"><span class="flag-name">Hardpoints Deployed</span><span class="flag-status" id="flag-status-6"></span></div>
+            <div class="flag" id="flag-8"><span class="flag-name">LightsOn</span><span class="flag-status" id="flag-status-8"></span></div>
+            <div class="flag" id="flag-9"><span class="flag-name">Cargo Scoop Deployed</span><span class="flag-status" id="flag-status-9"></span></div>
+            <div class="flag" id="flag-10"><span class="flag-name">Silent Running,</span><span class="flag-status" id="flag-status-10"></span></div>
+            <div class="flag" id="flag-27"><span class="flag-name">Hud in Analysis mode</span><span class="flag-status" id="flag-status-27"></span></div>
+            <div class="flag" id="flag-28"><span class="flag-name">Night Vision</span><span class="flag-status" id="flag-status-28"></span></div>
+            <div class="flag" id="flag-20"><span class="flag-name">Over Heating ( &gt; 100% )</span><span class="flag-status" id="flag-status-20"></span></div>
+        </div>
+
+        <div class="srv column">
+            <div class="flag" id="flag-12"><span class="flag-name">Srv Handbrake</span><span class="flag-status" id="flag-status-12"></span></div>
+            <div class="flag" id="flag-13"><span class="flag-name">Srv using Turret view</span><span class="flag-status" id="flag-status-13"></span></div>
+            <div class="flag" id="flag-14"><span class="flag-name">Srv Turret retracted (close to ship)</span><span class="flag-status" id="flag-status-14"></span></div>
+            <div class="flag" id="flag-15"><span class="flag-name">Srv DriveAssist</span><span class="flag-status" id="flag-status-15"></span></div>    
+            <div class="flag" id="flag-31"><span class="flag-name">srvHighBeam</span><span class="flag-status" id="flag-status-31"></span></div>
+            <div class="flag" id="flag-29"><span class="flag-name">Altitude from Average radius</span><span class="flag-status" id="flag-status-29"></span></div>
+        </div>
+
+        <div class="miscellaneous column">
+            <div class="flag" id="flag-21"><span class="flag-name">Has Lat Long</span><span class="flag-status" id="flag-status-21"></span></div>
+            <div class="flag" id="flag-22"><span class="flag-name">IsInDanger</span><span class="flag-status" id="flag-status-22"></span></div>
+            <div class="flag" id="flag-23"><span class="flag-name">Being Interdicted</span><span class="flag-status" id="flag-status-23"></span></div>    
+        </div>
+    </div>
+
+<!--
     <pre id="flags"></pre>
     <pre id="pips"></pre>
     <pre id="fuel"></pre>
     <pre id="cargo"></pre>
     <pre id="flags-binary"></pre>
     <pre id="counter"></pre>
-    <script>
-        function ge(id) {
-            return document.getElementById(id);
-        }
-        function sc(id, text) {
-            ge(id).textContent = text;
-        }
-        require('electron').ipcRenderer.on('ping', (event, message) => {
-            console.log(new Date() + ' - ' + 'Data Received')
-
-            const data = JSON.parse(message)
-            const filteredFlags = data.flags.filter(x => x.value == 1).map(x => x.name);
-
-            sc('flags-binary', Number(data.Flags).toString(2));
-            sc('timestamp', data.timestamp);
-            sc('flags', JSON.stringify(filteredFlags, null, 2));
-            sc('pips', data.Pips);
-            sc('fuel', JSON.stringify(data.Fuel));
-            sc('cargo', JSON.stringify(data.Cargo));
-            sc('counter', Number(document.getElementById('counter').textContent) +1);
-        })
-    </script>
+-->    <script src="index.js"></script>
     
 </body>
 </html>
